@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+%	linkcolor=blue,
+%	filecolor=magenta,      
+%	urlcolor=blue,
+}
+\renewcommand\UrlFont{\color{blue}\rmfamily\itshape}
+
+\title{Steps to setup mpich, hdf5, \& Chombo}
+\author{Aref Hashemi}
+\date{05/02/2019}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}[label=\textbf{\arabic*})]
+\item \textbf{apt-get install X}
+
+  \textbf{X} $\equiv$ gfortran, gnuplot, doxygen, graphviz, libblas-dev, liblapack-dev, libgtk2.0-dev, tcl, tcl-dev, m4, csh, subversion.
+  
+\item \textbf{source.} autoconf, automake, libtool
+
+  \begin{itemize}
+  \item .\slash configure -{}-prefix=\slash usr\slash local
+  \item make
+  \item sudo make install
+  \end{itemize}
+
+\item \textbf{mpich}
+  
+  \begin{itemize}
+  \item .\slash configure -{}-prefix=\slash usr\slash local\slash PROG\slash mpich
+  \item make
+  \item sudo make install. Disregard the possible warnings about the libraries.
+  \end{itemize}
+  
+\item \textbf{hdf5-serial}
+
+  \begin{itemize} 
+  \item .\slash configure -{}-prefix=\slash usr\slash local\slash PROG\slash hdf5-serial -{}-enable-fortran
+  \item make
+  \item make check
+  \item sudo make install
+  \end{itemize}
+
+
+\item \textbf{hdf5-parallel}
+
+  \begin{itemize}
+  \item CC=\slash usr\slash local\slash PROG\slash mpich\slash bin\slash mpicc .\slash configure -{}-prefix=\slash usr\slash local\slash PROG\slash hdf5-parallel -{}-enable-fortran -{}-enable-parallel
+  \item make
+  \item make check
+  \item sudo make install.
+  \end{itemize}
+
+\item Add the bashrcadd content to the end of the $\sim$\slash .bashrc file.
+  
+\item \textbf{Chombo}
+  \begin{itemize}
+  \item register in \href{https://commons.lbl.gov/display/chombo/Chombo+Download+Page}{Chombo Download Page} to get USERNAME \& PASSWORD
+  \item svn -{}-username USERNAME co https:\slash \slash anag-repo.lbl.gov\slash svn\slash Chombo\slash release\slash \{ver\} \{Directory-PATH-to-Chombo\}. See \href{https://anag-repo.lbl.gov/chombo-3.2/access.html}{Download Instructions} for more information.
+
+    e.g., for Chombo version 3.2, USERNAME=rfjd, download directory \slash home\slash rfjd\slash Chombo:\\svn -{}-username rfjd co https:\slash \slash anag-repo.lbl.gov\slash svn\slash Chombo\slash release\slash 3.2 \slash home\slash rfjd\slash Chombo\slash
+  \item copy the file Make.defs.local into \{Directory-PATH-to-Chombo\}\slash lib\slash mk
+  \item cd \{Directory-PATH-to-Chombo\}\slash lib
+  \item make lib
+  \item make doxygen. Chombo documentation and info can be found in \{Directory-PATH-to-Chombo\}\slash lib\slash doc\slash doxygen\slash html\slash index.html using your web browser.
+  \item To run the released examples, go to the corresponding directory, make all, mpiexec .\slash X.ex inputs. You will be able to open *.hdf5 files using visit if DIM = 2 or 3 in Make.defs.local.
+  \end{itemize}
+
+\renewcommand{\_}{\texttt{\detokenize{_}}}
+\item \textbf{visit}
+  \begin{itemize}
+  \item download the visit install script (visit\_installX\_Y\_Z, where X.Y.Z is the version) and platform from the \href{https://wci.llnl.gov/simulation/computer-codes/visit/executables}{official download page}.
+  \item chmod +x visit-installX\_Y\_Z
+  \item ./visit-installX\_Y\_Z X.Y.Z platform /usr/local/visit
+
+  e.g., for linux-x86\_64-ubuntu20 (platform) and version 3.1.4:\\
+  ./visit-install3\_1\_4 3.1.4 linux-x86\_64-ubuntu20 /usr/local/visit  
+  \item choose some number in the pop-up!
+  \item add {alias visit='/usr/local/visit/bin/visit'} to the .bashrc file.
+  \item typing `visit' in a terminal brings up the software! You can then load the hdf5 files to view the Chombo results.
+  \end{itemize}
+  
+\end{enumerate}
+
+The above procedure was checked with Ubuntu 20.04 LTS, \href{https://ftp.gnu.org/gnu/autoconf/}{autoconf-2.71}, \href{https://ftp.gnu.org/gnu/automake/}{automake-1.16.5}, \href{https://mirrors.ocf.berkeley.edu/gnu/libtool/}{libtool-2.4.7}, \href{https://wci.llnl.gov/simulation/computer-codes/visit/executables}{visit3\_1\_4.linux-x86\_64-ubuntu20}, \href{https://www.mpich.org/downloads/}{mpich-4.1.1}, and \href{https://www.hdfgroup.org/downloads/hdf5/source-code/}{hdf5-1.14.0}.
+\end{document}

@@ -1,0 +1,16 @@
+# Chombo stuff:
+export PATH=/usr/local/PROG/mpich/bin:$PATH
+
+export LD_LIBRARY_PATH=/usr/local/PROG/hdf5-parallel/lib:/usr/local/PROG/mpich/lib
+export LIBRARY_PATH=/usr/local/PROG/hdf5-parallel:/usr/local/PROG/mpich
+
+export MANPATH=/usr/local/PROG/mpich/share/man
+export CC=/usr/local/PROG/mpich/bin/mpicc
+export CXX=/usr/local/PROG/mpich/bin/mpicxx
+export FC=/usr/local/PROG/mpich/bin/mpif90
+export F77=/usr/local/PROG/mpich/bin/mpif77
+export F90=/usr/local/PROG/mpich/bin/mpif90
+
+alias visit='/usr/local/visit/bin/visit'
+
+export HWLOC_COMPONENTS="-gl"
